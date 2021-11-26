@@ -37,8 +37,6 @@ func (*BankResponseModel) GetBankResponse(date string) (BankResponseModel, error
 		return res, err
 	}
 
-	fmt.Println("client")
-
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println("Error while reading the response bytes:", err)
