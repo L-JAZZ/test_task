@@ -1,9 +1,19 @@
 package router
 
-import "github.com/gorilla/mux"
+import (
+	"fmt"
+	"net/http"
+	"test_task/api"
+	"test_task/configs"
+
+	"github.com/gorilla/mux"
+)
 
 func StartServer() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/", homeLink)
+	router.HandleFunc("/currency/save/{date}", api.SaveAPI)
+	router.HandleFunc("/currency/{date}/{code}", api.GetCurrency)
+
+	http.ListenAndServe(fmt.Sprintf("%s:%s", configs.Config.ListenIP, configs.Config.ListenPort), router)
 }
