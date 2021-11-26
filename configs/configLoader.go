@@ -4,7 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+
 	"os"
+
+	"github.com/jmoiron/sqlx"
+
+	_ "github.com/lib/pq"
 )
 
 type ConfigStruct struct {
@@ -46,4 +51,31 @@ func LoadConfiguration(file string) {
 	if err != nil {
 		return
 	}
+}
+
+var db *sqlx.DB
+
+// DB - Singleton Database connection
+func DB() *sqlx.DB {
+
+	if db == nil {
+		cString := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable password=%s",
+			Config.DB.DbServer,
+			Config.DB.DbPort,
+			Config.DB.DbUser,
+			Config.DB.DbName,
+			Config.DB.DbPasswd)
+
+		newDb, err := sqlx.Connect(Config.DB.Driver, cString)
+
+		if err != nil {
+			fmt.Printf("%+v", err)
+		}
+		// else {
+		// 	fmt.Printf("Successfully connected with %s!", configs.Config.DB.DbName)
+		// }
+
+		db = newDb
+	}
+	return db
 }
