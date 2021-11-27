@@ -15,5 +15,6 @@ func StartServer() {
 	router.HandleFunc("/currency/save/{date}", api.SaveAPI)
 	router.HandleFunc("/currency/{date}/{code}", api.GetCurrency)
 
+	fmt.Println("HTTP server started...")
 	http.ListenAndServe(fmt.Sprintf("%s:%s", configs.Config.ListenIP, configs.Config.ListenPort), router)
 }
